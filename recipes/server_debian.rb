@@ -19,8 +19,12 @@ include_recipe 'postgresql::client'
 
 package node['postgresql']['server']['packages']
 
+create_cluster_command = 'export LC_ALL=C; /usr/bin/pg_createcluster ' + node['postgresql']['version'] + ' main'
+if initopts = node['postgresql']['initdb_options']
+  create_cluster_command += " -- #{initopts}"
+end
 execute 'Set locale and Create cluster' do
-  command 'export LC_ALL=C; /usr/bin/pg_createcluster ' + node['postgresql']['version'] + ' main'
+  command create_cluster_command
   action :run
   not_if { ::File.directory?(node['postgresql']['config']['data_directory']) }
 end

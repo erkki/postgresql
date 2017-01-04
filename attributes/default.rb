@@ -243,3 +243,5 @@ when 'debian'
 end
 
 default['postgresql']['initdb_locale'] = 'UTF-8'
+# allow to pass initdb options such as --data-checksums to pg_createcluster
+default['postgresql']['initdb_options'] = nil
